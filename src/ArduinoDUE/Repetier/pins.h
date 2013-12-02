@@ -25,6 +25,7 @@ STEPPER_CURRENT_CONTROL
 #define CURRENT_CONTROL_LTC2600 3  // Use LTC2600 like Foltyn 3D Master
 
 
+/****************************************************************************/
 
 #if MOTHERBOARD == 401
 #ifndef __SAM3X8E__
@@ -97,6 +98,7 @@ STEPPER_CURRENT_CONTROL
 
 #endif
 
+/****************************************************************************/
 // RADDS Board
 // http://www.dr-henschke.de/RADDS_due.html
 #if MOTHERBOARD == 402
@@ -182,6 +184,99 @@ STEPPER_CURRENT_CONTROL
 
 #endif
 
+/****************************************************************************/
+// RAMPS-FD Board
+// 
+#if MOTHERBOARD == 403
+#ifndef __SAM3X8E__
+#error Oops!  Make sure you have 'Arduino Due' selected from the 'Tools -> Boards' menu.
+#endif
+
+#define KNOWN_BOARD
+#define CPU_ARCH ARCH_ARM
+/*****************************************************************
+* Arduino Due Pin Assignments
+******************************************************************/
+
+#define X_STEP_PIN     63
+#define X_DIR_PIN      62
+#define X_MIN_PIN      22
+#define X_MAX_PIN      30
+#define X_ENABLE_PIN   48
+
+#define Y_STEP_PIN     65 
+#define Y_DIR_PIN      64
+#define Y_MIN_PIN      24
+#define Y_MAX_PIN      38
+#define Y_ENABLE_PIN   46
+
+#define Z_STEP_PIN     67
+#define Z_DIR_PIN      66
+#define Z_MIN_PIN      26
+#define Z_MAX_PIN      34
+#define Z_ENABLE_PIN   44
+
+// Note that on the Due pin A0 on the board is channel 2 on the ARM chip
+#define HEATER_0_PIN     8
+#define TEMP_0_PIN       7 // Due analog pin #54
+
+#define HEATER_1_PIN     9 
+#define TEMP_1_PIN       6 // Due analog pin #55
+
+#define HEATER_2_PIN     10
+#define TEMP_2_PIN       5 // Due analog pin #56
+
+#define HEATER_3_PIN     11
+#define TEMP_3_PIN       4 // Due analog pin #57
+
+#define TEMP_4_PIN       3 // Due analog pin #58
+
+#define E0_STEP_PIN    36
+#define E0_DIR_PIN     28
+#define E0_ENABLE_PIN  42
+
+#define E1_STEP_PIN    43
+#define E1_DIR_PIN     41
+#define E1_ENABLE_PIN  39
+
+#define E2_STEP_PIN    32
+#define E2_DIR_PIN     47
+#define E2_ENABLE_PIN  45
+
+//#define SDSUPPORT      false
+#define SDPOWER 	   -1
+#define SDSS		   4 // 4,10,52 if using HW SPI.
+//#define SDSS		   -1
+//#define SDCARDDETECT   -1
+#define SDCARDDETECTINVERTED false
+#define LED_PIN 	   -1
+#define FAN_PIN 	   12 
+#define FAN2_PIN       2
+#define PS_ON_PIN      53
+#define KILL_PIN	   -1
+#define SUICIDE_PIN    -1  //PIN that has to be turned on right after start, to keep power flowing.
+
+#define SDA_PIN 				20  	// 20 or 70
+#define SCL_PIN 				21  	// 21 or 71
+
+
+#define E0_PINS E0_STEP_PIN,E0_DIR_PIN,E0_ENABLE_PIN,
+#define E1_PINS E1_STEP_PIN,E1_DIR_PIN,E1_ENABLE_PIN,
+#define E2_PINS E2_STEP_PIN,E2_DIR_PIN,E2_ENABLE_PIN,
+
+#define TWI_CLOCK_FREQ          400000
+// see eeprom device data sheet for the following values these are for 24xx256
+#define EEPROM_SERIAL_ADDR      0x50   // 7 bit i2c address (without R/W bit)
+#define EEPROM_PAGE_SIZE        64     // page write buffer size
+#define EEPROM_PAGE_WRITE_TIME  7      // page write time in milliseconds (docs say 5ms but that is too short)
+// specify size of eeprom address register
+// TWI_MMR_IADRSZ_1_BYTE for 1 byte, or TWI_MMR_IADRSZ_2_BYTE for 2 byte
+#define EEPROM_ADDRSZ_BYTES     TWI_MMR_IADRSZ_2_BYTE
+
+#endif
+
+/****************************************************************************/
+
 #ifndef SDSSORIG
 #define SDSSORIG -1
 #endif
@@ -204,15 +299,15 @@ STEPPER_CURRENT_CONTROL
 
 // Available chip select pins for HW SPI are 4 10 52
 #if (SDSS == 4) || (SDSS == 10) || (SDSS == 52) 
-#if (SDSS == 10)
+#if (SDSS == 10) // SPI_CS0
 #define SPI_PIN         77
 #define SPI_CHAN        0
 #else
-#if (SDSS == 52) 
+#if (SDSS == 52) // SPI_CS2
 #define SPI_PIN         86
 #define SPI_CHAN        2
-#else 
-#define SPI_PIN         77
+#else // SPI_CS1 
+#define SPI_PIN         87
 #define SPI_CHAN        0
 #endif
 #endif

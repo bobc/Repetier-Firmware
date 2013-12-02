@@ -70,9 +70,10 @@ To override EEPROM settings with config settings, set EEPROM_MODE 0
 // Rambo                      = 301
 // Arduino Due                = 401 // This is only experimental
 // Arduino Due with RADDS     = 402
+// Arduino Due with RAMPS-FD  = 403
 // Sanguish Beta              = 501
 
-#define MOTHERBOARD 402
+#define MOTHERBOARD 403
 
 #include "pins.h"
 
@@ -95,7 +96,7 @@ is a full cartesian system where x, y and z moves are handled by separate motors
 Cases 1 and 2 cover all needed xy H gantry systems. If you get results mirrored etc. you can swap motor connections for x and y.
 If a motor turns in the wrong direction change INVERT_X_DIR or INVERT_Y_DIR.
 */
-#define DRIVE_SYSTEM 3
+#define DRIVE_SYSTEM 0
 
 // ##########################################################################################
 // ##                               Calibration                                            ##
@@ -143,11 +144,11 @@ If a motor turns in the wrong direction change INVERT_X_DIR or INVERT_Y_DIR.
     /** \brief Number of steps for a 1mm move in x direction.
     For xy gantry use 2*belt moved!
     Overridden if EEPROM activated. */
-    #define XAXIS_STEPS_PER_MM 98.425196
+    #define XAXIS_STEPS_PER_MM 87.58
     /** \brief Number of steps for a 1mm move in y direction.
     For xy gantry use 2*belt moved!
     Overridden if EEPROM activated.*/
-    #define YAXIS_STEPS_PER_MM 98.425196
+    #define YAXIS_STEPS_PER_MM 87.58
     /** \brief Number of steps for a 1mm move in z direction  Overridden if EEPROM activated.*/
     #define ZAXIS_STEPS_PER_MM 2560
 #endif
@@ -162,7 +163,7 @@ If a motor turns in the wrong direction change INVERT_X_DIR or INVERT_Y_DIR.
 #define EXT0_X_OFFSET 0
 #define EXT0_Y_OFFSET 0
 // for skeinforge 40 and later, steps to pull the plasic 1 mm inside the extruder, not out.  Overridden if EEPROM activated.
-#define EXT0_STEPS_PER_MM 106 //425 // 825.698 //457 
+#define EXT0_STEPS_PER_MM 3360 //425 // 825.698 //457 
 // What type of sensor is used?
 // 1 is 100k thermistor (Epcos B57560G0107F000 - RepRap-Fab.org and many other)
 // 2 is 200k thermistor
@@ -597,29 +598,29 @@ A good start is 30 lower then the optimal value. You need to leave room for cool
 use a mechanical endstop connected with GND. Set value to false for no pullup
 on this endstop.
 */
-#define ENDSTOP_PULLUP_X_MIN false
-#define ENDSTOP_PULLUP_Y_MIN false
-#define ENDSTOP_PULLUP_Z_MIN false
-#define ENDSTOP_PULLUP_X_MAX false
-#define ENDSTOP_PULLUP_Y_MAX false
-#define ENDSTOP_PULLUP_Z_MAX false
+#define ENDSTOP_PULLUP_X_MIN true
+#define ENDSTOP_PULLUP_Y_MIN true
+#define ENDSTOP_PULLUP_Z_MIN true
+#define ENDSTOP_PULLUP_X_MAX true
+#define ENDSTOP_PULLUP_Y_MAX true
+#define ENDSTOP_PULLUP_Z_MAX true
 
-// Set to true to invert the logic of the endstops
+//set to true to invert the logic of the endstops
 #define ENDSTOP_X_MIN_INVERTING false
 #define ENDSTOP_Y_MIN_INVERTING false
 #define ENDSTOP_Z_MIN_INVERTING false
-#define ENDSTOP_X_MAX_INVERTING true
-#define ENDSTOP_Y_MAX_INVERTING true
-#define ENDSTOP_Z_MAX_INVERTING true
+#define ENDSTOP_X_MAX_INVERTING false
+#define ENDSTOP_Y_MAX_INVERTING false
+#define ENDSTOP_Z_MAX_INVERTING false
 
 // Set the values true where you have a hardware endstop. The Pin number is taken from pins.h.
 
-#define MIN_HARDWARE_ENDSTOP_X false
+#define MIN_HARDWARE_ENDSTOP_X true
 #define MIN_HARDWARE_ENDSTOP_Y false
-#define MIN_HARDWARE_ENDSTOP_Z false
-#define MAX_HARDWARE_ENDSTOP_X true
+#define MIN_HARDWARE_ENDSTOP_Z true
+#define MAX_HARDWARE_ENDSTOP_X false
 #define MAX_HARDWARE_ENDSTOP_Y true
-#define MAX_HARDWARE_ENDSTOP_Z true
+#define MAX_HARDWARE_ENDSTOP_Z false
 
 //If your axes are only moving in one direction, make sure the endstops are connected properly.
 //If your axes move in one direction ONLY when the endstops are triggered, set ENDSTOPS_INVERTING to true here
@@ -646,9 +647,9 @@ on this endstop.
 
 //// ENDSTOP SETTINGS:
 // Sets direction of endstops when homing; 1=MAX, -1=MIN
-#define X_HOME_DIR 1
+#define X_HOME_DIR -1
 #define Y_HOME_DIR 1
-#define Z_HOME_DIR 1
+#define Z_HOME_DIR -1
 
 // Delta robot radius endstop
 #define max_software_endstop_r true
@@ -670,9 +671,9 @@ on this endstop.
 
 // For higher precision you can reduce the speed for the second test on the endstop
 // during homing operation. The homing speed is divided by the value. 1 = same speed, 2 = half speed
-#define ENDSTOP_X_RETEST_REDUCTION_FACTOR 3
-#define ENDSTOP_Y_RETEST_REDUCTION_FACTOR 3
-#define ENDSTOP_Z_RETEST_REDUCTION_FACTOR 3
+#define ENDSTOP_X_RETEST_REDUCTION_FACTOR 10
+#define ENDSTOP_Y_RETEST_REDUCTION_FACTOR 10
+#define ENDSTOP_Z_RETEST_REDUCTION_FACTOR 10
 
 // When you have several endstops in one circuit you need to disable it after homing by moving a
 // small amount back. This is also the case with H-belt systems.
@@ -828,7 +829,7 @@ Mega. Used only for nonlinear systems like delta or tuga. */
 #define HOMING_FEEDRATE_Z 60
 
 /** Set order of axis homing. Use HOME_ORDER_XYZ and replace XYZ with your order. */
-#define HOMING_ORDER HOME_ORDER_ZXY
+#define HOMING_ORDER HOME_ORDER_XYZ
 /* If you have a backlash in both z-directions, you can use this. For most printer, the bed will be pushed down by it's
 own weight, so this is nearly never needed. */
 #define ENABLE_BACKLASH_COMPENSATION false
@@ -874,14 +875,14 @@ If the interval at full speed is below this value, smoothing is disabled for tha
 /** \brief X, Y, Z max acceleration in mm/s^2 for printing moves or retracts. Make sure your printer can go that high!
  Overridden if EEPROM activated.
 */
-#define MAX_ACCELERATION_UNITS_PER_SQ_SECOND_X 3000
-#define MAX_ACCELERATION_UNITS_PER_SQ_SECOND_Y 3000
-#define MAX_ACCELERATION_UNITS_PER_SQ_SECOND_Z 3000
+#define MAX_ACCELERATION_UNITS_PER_SQ_SECOND_X 750
+#define MAX_ACCELERATION_UNITS_PER_SQ_SECOND_Y 750
+#define MAX_ACCELERATION_UNITS_PER_SQ_SECOND_Z 750
 
 /** \brief X, Y, Z max acceleration in mm/s^2 for travel moves.  Overridden if EEPROM activated.*/
-#define MAX_TRAVEL_ACCELERATION_UNITS_PER_SQ_SECOND_X 4000
-#define MAX_TRAVEL_ACCELERATION_UNITS_PER_SQ_SECOND_Y 4000
-#define MAX_TRAVEL_ACCELERATION_UNITS_PER_SQ_SECOND_Z 4000
+#define MAX_TRAVEL_ACCELERATION_UNITS_PER_SQ_SECOND_X 750
+#define MAX_TRAVEL_ACCELERATION_UNITS_PER_SQ_SECOND_Y 750
+#define MAX_TRAVEL_ACCELERATION_UNITS_PER_SQ_SECOND_Z 750
 
 /** \brief Maximum allowable jerk.
 
@@ -1036,7 +1037,7 @@ matches, the stored values are used to overwrite the settings.
 IMPORTANT: With mode <>0 some changes in Configuration.h are not set any more, as they are
            taken from the EEPROM.
 */
-#define EEPROM_MODE 1
+#define EEPROM_MODE 0
 
 
 /**************** duplicate motor driver ***************
@@ -1122,12 +1123,13 @@ is always running and is not hung up for some unknown reason. */
 #define Z_PROBE_Y3 80
 
 /** Set to false to disable SD support: */
-#ifndef SDSUPPORT  // Some boards have sd support on board. These define the values already in pins.h
-#define SDSUPPORT true
+//#define SDSUPPORT true
+#ifdef SDSUPPORT  // Some boards have sd support on board. These define the values already in pins.h
+
 /** If set to false all files with longer names then 8.3 or having a tilde in the name will be hidden */
 #define SD_ALLOW_LONG_NAMES false
 // Uncomment to enable or change card detection pin. With card detection the card is mounted on insertion.
-#define SDCARDDETECT -1
+//#define SDCARDDETECT -1
 // Change to true if you get a inserted message on removal.
 #define SDCARDDETECTINVERTED false
 #endif
@@ -1167,7 +1169,7 @@ The following settings override uiconfig.h!
 9 = PiBot Display/Controller extension with 16x2 character display
 10 = Gadgets3D shield on RAMPS 1.4, see http://reprap.org/wiki/RAMPS_1.3/1.4_GADGETS3D_Shield_with_Panel
 */
-#define FEATURE_CONTROLLER 7
+#define FEATURE_CONTROLLER 0
 
 /**
 Select the language to use.
@@ -1179,7 +1181,7 @@ Select the language to use.
 5 = Spanish
 6 = Swedish
 */
-#define UI_LANGUAGE 1
+#define UI_LANGUAGE 0
 
 // This is line 2 of the status display at startup. Change to your like.
 #define UI_VERSION_STRING2 "Delta Tower"
