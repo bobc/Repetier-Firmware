@@ -440,7 +440,7 @@ STEPPER_CURRENT_CONTROL
 #define HEATER_3_PIN        17  // Only available with X3 shield
 #define TEMP_3_PIN          12  // Only available with X3 shield
 #define HEATER_4_PIN        16  // Only available with X3 shield
-#define TEMP_4_PIN          11  // Only available with X3 shield
+#define TEMP_4_PIN          5 //11  // Only available with X3 shield
 
 #define E1_PINS E1_STEP_PIN,E1_DIR_PIN,E1_ENABLE_PIN,
 #define E2_PINS E2_STEP_PIN,E2_DIR_PIN,E2_ENABLE_PIN,
@@ -501,8 +501,8 @@ STEPPER_CURRENT_CONTROL
 #define HEATER_0_PIN       2    // EXTRUDER 1
 #define HEATER_2_PIN       3    // EXTRUDER 2
 #define HEATER_3_PIN       6    // EXTRUDER 3
-//optional FAN1 can be used as 4th heater output: #define HEATER_3_PIN       8    // EXTRUDER 4
-#define HEATER_1_PIN     9    // BED
+//optional FAN1 can be used as 4th heater output: #define HEATER_4_PIN       8    // EXTRUDER 4
+#define HEATER_1_PIN       9    // BED
 
 #define TEMP_0_PIN         15   // ANALOG NUMBERING
 #define TEMP_2_PIN         14   // ANALOG NUMBERING
@@ -776,7 +776,7 @@ STEPPER_CURRENT_CONTROL
 #define TEMP_1_PIN          6   // MUST USE ANALOG INPUT NUMBERING NOT DIGITAL OUTPUT NUMBERING!!!!!!!!! (pin 34 bed)
 #define TEMP_2_PIN         -1
 #define SDPOWER            -1
-#define SDSS               37 // 31
+#define SDSS               31 // 31 http://reprap.org/wiki/Melzi#Melzi_Arduino_Pin_Numbers says 31, schamtic show pin 37 = PA0 which is arduino pin 31!
 #define SCK_PIN          7
 #define MISO_PIN         6
 #define MOSI_PIN         5

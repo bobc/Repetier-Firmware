@@ -49,6 +49,8 @@ Implemented Codes
 - G90 - Use absolute coordinates
 - G91 - Use relative coordinates
 - G92 - Set current position to cordinates given
+- G131 - set extruder offset position to 0 - needed for calibration with G132
+- G132 - calibrate endstop positions. Call this, after calling G131 and after centering the extruder holder.
 
 RepRap M Codes
 
@@ -61,7 +63,6 @@ RepRap M Codes
 
 Custom M Codes
 
-- M80  - Turn on Power Supply
 - M20  - List SD card
 - M21  - Init SD card
 - M22  - Release SD card
@@ -124,6 +125,10 @@ Custom M Codes
 
 #if UI_DISPLAY_TYPE==4
 //#include <LiquidCrystal.h> // Uncomment this if you are using liquid crystal library
+#endif
+
+#if UI_DISPLAY_TYPE==5
+#include <U8glib.h>  // comment this if you get compilation problems
 #endif
 
 void setup()

@@ -16,7 +16,7 @@
 
 */
 
-#if !defined(UI_DISPLAY_CHARSET) || UI_DISPLAY_CHARSET>2
+#if !defined(UI_DISPLAY_CHARSET) || UI_DISPLAY_CHARSET>3
 #define UI_DISPLAY_CHARSET 1
 #endif
 
@@ -59,6 +59,23 @@
 #define STR_szlig "160"
 #endif
 
+
+#if UI_DISPLAY_CHARSET==3 // U8glib
+#define CHAR_RIGHT 187 //>>
+#define CHAR_SELECTOR 255 //'>'
+#define CHAR_SELECTED 254 //'*'
+#define STR_auml "\344"
+#define STR_Auml "\304"
+#define STR_uuml "\374"
+#define STR_Uuml "\334"
+#define STR_ouml "\366"
+#define STR_Ouml "\326"
+#define STR_szlig "\337"
+#endif
+#define TEST176 "176\260\261\262\263\264\265\266\267\270\271\272\273\274\275\276\277"
+#define TEST192 "192\300\301\302\303\304\305\306\307\310\311\312\313\314\315\316\317"
+#define TEST208 "208\320\321\322\323\324\325\326\327\330\331\332\333\334\335\336\337"
+#define TEST224 "224\340\341\342\343\344\345\346\347\350\351\352\353\354\355\356\357"
 
 
 // At first all terms in english are defined. After that the selected language
@@ -166,6 +183,7 @@
 #define UI_TEXT_ACTION_YPOSITION_FAST2 "Y:%x1 mm","Min:%sy Max:%sY"
 #define UI_TEXT_ACTION_ZPOSITION_FAST2 "Z:%x2 mm","Min:%sz Max:%sZ"
 #define UI_TEXT_FANSPEED          "Fan speed"
+#define UI_TEXT_ACTION_FANSPEED   "Fan speed:%Fs%%%"
 #define UI_TEXT_FAN_OFF           "Turn Fan Off"
 #define UI_TEXT_FAN_25            "Set Fan 25%%%"
 #define UI_TEXT_FAN_50            "Set Fan 50%%%"
@@ -185,7 +203,7 @@
 #define UI_TEXT_EXTR_ADVANCE_L    "Advance lin:%Xl"
 #define UI_TEXT_EXTR_ADVANCE_K    "Advance quad:%Xa"
 #define UI_TEXT_EXTR_MANAGER      "Control:%Xh"
-#define UI_TEXT_EXTR_PGAIN        "PID P:%Xp"
+#define UI_TEXT_EXTR_PGAIN        "DT/PID P:%Xp"
 #define UI_TEXT_EXTR_IGAIN        "PID I:%Xi"
 #define UI_TEXT_EXTR_DGAIN        "PID D:%Xd"
 #define UI_TEXT_EXTR_DMIN         "Drive Min:%Xm"
@@ -212,8 +230,8 @@
 #define UI_TEXT_FLOW_MULTIPLY     "Flow Mul. :%of%%%"
 #define UI_TEXT_SHOW_MEASUREMENT  "Show meas."
 #define UI_TEXT_RESET_MEASUREMENT "Reset meas."
-#define UI_TEXT_SET_MEASURED_ORIGIN "Set meas. origin"
-#define UI_TEXT_DELTA             "Delta Calib."
+#define UI_TEXT_SET_MEASURED_ORIGIN "Set Z=0"
+#define UI_TEXT_ZCALIB             "Z Calib."
 #define UI_TEXT_SET_P1            "Set P1"
 #define UI_TEXT_SET_P2            "Set P2"
 #define UI_TEXT_SET_P3	          "Set P3"
@@ -231,6 +249,9 @@
 #define UI_TEXT_PRINTTIME_MINUTES ""
 #define UI_TEXT_PRINT_TIME     "Printing time"
 #define UI_TEXT_PRINT_FILAMENT "Filament printed"
+#define UI_TEXT_POWER            "ATX power on/off"
+#define UI_TEXT_STRING_HM_DEADTIME     "Dead Time"
+#define UI_TEXT_STRING_HM_SLOWBANG     "SlowBang"
 
 // *************** German translation ****************
 
@@ -333,6 +354,7 @@
 #define UI_TEXT_ACTION_YPOSITION_FAST2 "Y:%x1 mm","Min:%sy Max:%sY"
 #define UI_TEXT_ACTION_ZPOSITION_FAST2 "Z:%x2 mm","Min:%sz Max:%sZ"
 #define UI_TEXT_FANSPEED          "L" STR_uuml "fter"
+#define UI_TEXT_ACTION_FANSPEED   "L" STR_uuml "fter:%Fs%%%"
 #define UI_TEXT_FAN_OFF           "L" STR_uuml "fter Aus"
 #define UI_TEXT_FAN_25            "L" STR_uuml "fter auf 25%%%"
 #define UI_TEXT_FAN_50            "L" STR_uuml "fter auf 50%%%"
@@ -352,7 +374,7 @@
 #define UI_TEXT_EXTR_ADVANCE_L    "Advance lin:%Xl"
 #define UI_TEXT_EXTR_ADVANCE_K    "Advance quad:%Xa"
 #define UI_TEXT_EXTR_MANAGER      "Regler:%Xh"
-#define UI_TEXT_EXTR_PGAIN        "PID P:%Xp"
+#define UI_TEXT_EXTR_PGAIN        "DT/PID P:%Xp"
 #define UI_TEXT_EXTR_IGAIN        "PID I:%Xi"
 #define UI_TEXT_EXTR_DGAIN        "PID D:%Xd"
 #define UI_TEXT_EXTR_DMIN         "Drive Min:%Xm"
@@ -381,8 +403,8 @@
 #define UI_TEXT_ADVANCE_K         "Advance quad:%Xa"
 #define UI_TEXT_SHOW_MEASUREMENT  "Zeige Messung"
 #define UI_TEXT_RESET_MEASUREMENT "Reset Messung"
-#define UI_TEXT_SET_MEASURED_ORIGIN "Setze Ursprung Mess."
-#define UI_TEXT_DELTA			  "Delta Calib."
+#define UI_TEXT_SET_MEASURED_ORIGIN "Setze Z=0"
+#define UI_TEXT_ZCALIB			  "Z Calib."
 #define UI_TEXT_SET_P1			  "Setze P1"
 #define UI_TEXT_SET_P2			  "Setze P2"
 #define UI_TEXT_SET_P3			  "Setze P3"
@@ -400,6 +422,9 @@
 #define UI_TEXT_PRINTTIME_MINUTES ""
 #define UI_TEXT_PRINT_TIME     "Ges. Druckzeit"
 #define UI_TEXT_PRINT_FILAMENT "Filament gedruckt"
+#define UI_TEXT_POWER            "ATX Netzteil an/aus"
+#define UI_TEXT_STRING_HM_DEADTIME     "Totzeit"
+#define UI_TEXT_STRING_HM_SLOWBANG     "Langs.BB"
 
 #endif
 
@@ -524,7 +549,7 @@
 #define UI_TEXT_EXTR_ADVANCE_L    "Advance lin:%Xl"
 #define UI_TEXT_EXTR_ADVANCE_K    "Advance quad:%Xa"
 #define UI_TEXT_EXTR_MANAGER      "Control:%Xh"
-#define UI_TEXT_EXTR_PGAIN        "PID P:%Xp"
+#define UI_TEXT_EXTR_PGAIN        "DT/PID P:%Xp"
 #define UI_TEXT_EXTR_IGAIN        "PID I:%Xi"
 #define UI_TEXT_EXTR_DGAIN        "PID D:%Xd"
 #define UI_TEXT_EXTR_DMIN         "Drive Min:%Xm"
@@ -675,7 +700,7 @@
 #define UI_TEXT_EXTR_ADVANCE_L    "Advance lin:%Xl"
 #define UI_TEXT_EXTR_ADVANCE_K    "Advance quad:%Xa"
 #define UI_TEXT_EXTR_MANAGER      "Controle:%Xh"
-#define UI_TEXT_EXTR_PGAIN        "PID P:%Xp"
+#define UI_TEXT_EXTR_PGAIN        "DT/PID P:%Xp"
 #define UI_TEXT_EXTR_IGAIN        "PID I:%Xi"
 #define UI_TEXT_EXTR_DGAIN        "PID D:%Xd"
 #define UI_TEXT_EXTR_DMIN         "Drive Min:%Xm"
@@ -828,7 +853,7 @@
 #define UI_TEXT_EXTR_ADVANCE_L    "Avanzamento lin:%Xl"
 #define UI_TEXT_EXTR_ADVANCE_K    "Avanzamento espon:%Xa"
 #define UI_TEXT_EXTR_MANAGER      "Controllo:%Xh"
-#define UI_TEXT_EXTR_PGAIN        "PID P:%Xp"
+#define UI_TEXT_EXTR_PGAIN        "DT/PID P:%Xp"
 #define UI_TEXT_EXTR_IGAIN        "PID I:%Xi"
 #define UI_TEXT_EXTR_DGAIN        "PID D:%Xd"
 #define UI_TEXT_EXTR_DMIN         "Drive Min:%Xm"
@@ -977,7 +1002,7 @@
 #define UI_TEXT_EXTR_ADVANCE_L    "Advance lin:%Xl"
 #define UI_TEXT_EXTR_ADVANCE_K    "Advance quad:%Xa"
 #define UI_TEXT_EXTR_MANAGER      "Control:%Xh"
-#define UI_TEXT_EXTR_PGAIN        "PID P:%Xp"
+#define UI_TEXT_EXTR_PGAIN        "DT/PID P:%Xp"
 #define UI_TEXT_EXTR_IGAIN        "PID I:%Xi"
 #define UI_TEXT_EXTR_DGAIN        "PID D:%Xd"
 #define UI_TEXT_EXTR_DMIN         "Drive Min:%Xm"
@@ -1263,6 +1288,7 @@
 #define UI_TEXT_ACTION_YPOSITION_FAST2 "Y:%x1 mm","Min:%sy Max:%sY"
 #define UI_TEXT_ACTION_ZPOSITION_FAST2 "Z:%x2 mm","Min:%sz Max:%sZ"
 #define UI_TEXT_FANSPEED          "Fan speed"
+#define UI_TEXT_ACTION_FANSPEED   "Fan speed:%Fs%%%"
 #define UI_TEXT_FAN_OFF           "Turn Fan Off"
 #define UI_TEXT_FAN_25            "Set Fan 25%%%"
 #define UI_TEXT_FAN_50            "Set Fan 50%%%"
@@ -1282,7 +1308,7 @@
 #define UI_TEXT_EXTR_ADVANCE_L    "Advance lin:%Xl"
 #define UI_TEXT_EXTR_ADVANCE_K    "Advance quad:%Xa"
 #define UI_TEXT_EXTR_MANAGER      "Control:%Xh"
-#define UI_TEXT_EXTR_PGAIN        "PID P:%Xp"
+#define UI_TEXT_EXTR_PGAIN        "DT/PID P:%Xp"
 #define UI_TEXT_EXTR_IGAIN        "PID I:%Xi"
 #define UI_TEXT_EXTR_DGAIN        "PID D:%Xd"
 #define UI_TEXT_EXTR_DMIN         "Drive Min:%Xm"
@@ -1317,5 +1343,8 @@
 #define UI_TEXT_PRINTTIME_MINUTES ""
 #define UI_TEXT_PRINT_TIME     "Printing time"
 #define UI_TEXT_PRINT_FILAMENT "Filament printed"
+#define UI_TEXT_POWER            "ATX power on/off"
+#define UI_TEXT_STRING_HM_DEADTIME     "Dead Time"
+#define UI_TEXT_STRING_HM_SLOWBANG     "SlowBang"
 
 #endif

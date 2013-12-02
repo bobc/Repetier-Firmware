@@ -49,29 +49,9 @@ To override EEPROM settings with config settings, set EEPROM_MODE 0
 #define NUM_EXTRUDER 1
 
 //// The following define selects which electronics board you have. Please choose the one that matches your setup
-// Gen3 PLUS for RepRap Motherboard V1.2 = 21
-// MEGA/RAMPS up to 1.2       = 3
-// RAMPS 1.3/RAMPS 1.4        = 33
-// Azteeg X3                  = 34
-// Gen6                       = 5
-// Gen6 deluxe                = 51
-// Sanguinololu up to 1.1     = 6
-// Sanguinololu 1.2 and above = 62
-// Melzi board                = 63  // Define REPRAPPRO_HUXLEY if you have one for correct HEATER_1_PIN assignment!
-// Gen7 1.1 till 1.3.x        = 7
-// Gen7 1.4.1 and later       = 71
-// Sethi 3D_1                 = 72
-// Teensylu (at90usb)         = 8 // requires Teensyduino
-// Printrboard (at90usb)      = 9 // requires Teensyduino
-// Foltyn 3D Master           = 12
-// MegaTronics 1.0            = 70
-// Megatronics 2.0            = 701
-// RUMBA                      = 80  // Get it from reprapdiscount
-// Rambo                      = 301
 // Arduino Due                = 401 // This is only experimental
 // Arduino Due with RADDS     = 402
 // Arduino Due with RAMPS-FD  = 403
-// Sanguish Beta              = 501
 
 #define MOTHERBOARD 403
 
@@ -1203,6 +1183,13 @@ Unfotunately, the encoder have a different count of phase changes between clicks
 Select an encoder speed from 0 = fastest to 2 = slowest that results in one menu move per click.
 */
 #define UI_ENCODER_SPEED 2
+/* There are 2 ways to change positions. You can move by increments of 1/0.1 mm resulting in more menu entries
+and requiring many turns on your encode. The alternative is to enable speed dependent positioning. It will change
+the move distance depending on the speed you turn the encoder. That way you can move very fast and very slow in the
+same setting.
+
+*/
+#define UI_SPEEDDEPENDENT_POSITIONING true
 /** \brief bounce time of keys in milliseconds */
 #define UI_KEY_BOUNCETIME 10
 

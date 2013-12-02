@@ -152,6 +152,7 @@
 #define UI_ACTION_EXTRUDER2_TEMP        1103
 #define UI_ACTION_SELECT_EXTRUDER2      1104
 #define UI_ACTION_WRITE_DEBUG           1105
+#define UI_ACTION_FANSPEED              1106
 
 #define UI_ACTION_MENU_XPOS             4000
 #define UI_ACTION_MENU_YPOS             4001
@@ -163,8 +164,8 @@
 #define UI_ACTION_MENU_QUICKSETTINGS    4007
 #define UI_ACTION_MENU_EXTRUDER         4008
 #define UI_ACTION_MENU_POSITIONS        4009
-#define UI_ACTION_SHOW_MEASUREMENT		4010
-#define UI_ACTION_RESET_MEASUREMENT		4011
+//#define UI_ACTION_SHOW_MEASUREMENT		4010
+//#define UI_ACTION_RESET_MEASUREMENT		4011
 #define UI_ACTION_SET_MEASURED_ORIGIN	4012
 #define UI_ACTION_SET_P1				4013
 #define UI_ACTION_SET_P2				4014
@@ -185,12 +186,13 @@
 // Load basic language definition to make sure all values are defined
 #include "uilang.h"
 
-#include "Configuration.h"
-
 typedef struct {
   const char *text; // Menu text
-  unsigned char menuType; // 0 = Info, 1 = Headline, 2 = submenu ref, 3 = direct action command, 4 = modify action command
-  unsigned int action;
+  uint8_t menuType; // 0 = Info, 1 = Headline, 2 = submenu ref, 3 = direct action command, 4 = modify action command
+  uint16_t action;
+  uint8_t filter; // allows dynamic menu filtering based on Printer::menuMode bits set.
+  uint8_t nofilter; // Hide if one of these bits are set
+  bool showEntry() const;
 } const UIMenuEntry;
 
 typedef struct {
@@ -278,40 +280,44 @@ extern const int8_t encoder_table[16] PROGMEM ;
 #define UI_STRING(name,text) const char PROGMEM name[] = text;
 
 #define UI_PAGE4(name,row1,row2,row3,row4) UI_STRING(name ## _1txt,row1);UI_STRING(name ## _2txt,row2);UI_STRING(name ## _3txt,row3);UI_STRING(name ## _4txt,row4);\
-  UIMenuEntry name ## _1 PROGMEM ={name ## _1txt,0,0};\
-  UIMenuEntry name ## _2 PROGMEM ={name ## _2txt,0,0};\
-  UIMenuEntry name ## _3 PROGMEM ={name ## _3txt,0,0};\
-  UIMenuEntry name ## _4 PROGMEM ={name ## _4txt,0,0};\
+  UIMenuEntry name ## _1 PROGMEM ={name ## _1txt,0,0,0,0};\
+  UIMenuEntry name ## _2 PROGMEM ={name ## _2txt,0,0,0,0};\
+  UIMenuEntry name ## _3 PROGMEM ={name ## _3txt,0,0,0,0};\
+  UIMenuEntry name ## _4 PROGMEM ={name ## _4txt,0,0,0,0};\
   const UIMenuEntry * const name ## _entries [] PROGMEM = {&name ## _1,&name ## _2,&name ## _3,&name ## _4};\
   const UIMenu name PROGMEM = {0,0,4,name ## _entries};
 #define UI_PAGE2(name,row1,row2) UI_STRING(name ## _1txt,row1);UI_STRING(name ## _2txt,row2);\
-  UIMenuEntry name ## _1 PROGMEM ={name ## _1txt,0,0};\
-  UIMenuEntry name ## _2 PROGMEM ={name ## _2txt,0,0};\
+  UIMenuEntry name ## _1 PROGMEM ={name ## _1txt,0,0,0,0};\
+  UIMenuEntry name ## _2 PROGMEM ={name ## _2txt,0,0,0,0};\
   const UIMenuEntry * const name ## _entries[] PROGMEM = {&name ## _1,&name ## _2};\
   const UIMenu name PROGMEM = {0,0,2,name ## _entries};
 #define UI_MENU_ACTION4C(name,action,rows) UI_MENU_ACTION4(name,action,rows)
 #define UI_MENU_ACTION2C(name,action,rows) UI_MENU_ACTION2(name,action,rows)
 #define UI_MENU_ACTION4(name,action,row1,row2,row3,row4) UI_STRING(name ## _1txt,row1);UI_STRING(name ## _2txt,row2);UI_STRING(name ## _3txt,row3);UI_STRING(name ## _4txt,row4);\
-  UIMenuEntry name ## _1 PROGMEM ={name ## _1txt,0,0};\
-  UIMenuEntry name ## _2 PROGMEM ={name ## _2txt,0,0};\
-  UIMenuEntry name ## _3 PROGMEM ={name ## _3txt,0,0};\
-  UIMenuEntry name ## _4 PROGMEM ={name ## _4txt,0,0};\
+  UIMenuEntry name ## _1 PROGMEM ={name ## _1txt,0,0,0,0};\
+  UIMenuEntry name ## _2 PROGMEM ={name ## _2txt,0,0,0,0};\
+  UIMenuEntry name ## _3 PROGMEM ={name ## _3txt,0,0,0,0};\
+  UIMenuEntry name ## _4 PROGMEM ={name ## _4txt,0,0,0,0};\
   const UIMenuEntry * const name ## _entries[] PROGMEM = {&name ## _1,&name ## _2,&name ## _3,&name ## _4};\
   const UIMenu name PROGMEM = {3,action,4,name ## _entries};
 #define UI_MENU_ACTION2(name,action,row1,row2) UI_STRING(name ## _1txt,row1);UI_STRING(name ## _2txt,row2);\
-  UIMenuEntry name ## _1 PROGMEM ={name ## _1txt,0,0};\
-  UIMenuEntry name ## _2 PROGMEM ={name ## _2txt,0,0};\
+  UIMenuEntry name ## _1 PROGMEM ={name ## _1txt,0,0,0,0};\
+  UIMenuEntry name ## _2 PROGMEM ={name ## _2txt,0,0,0,0};\
   const UIMenuEntry * const name ## _entries[] PROGMEM = {&name ## _1,&name ## _2};\
   const UIMenu name PROGMEM = {3,action,2,name ## _entries};
-#define UI_MENU_HEADLINE(name,text) UI_STRING(name ## _txt,text);UIMenuEntry name PROGMEM = {name ## _txt,1,0};
-#define UI_MENU_CHANGEACTION(name,row,action) UI_STRING(name ## _txt,row);UIMenuEntry name PROGMEM = {name ## _txt,4,action};
-#define UI_MENU_ACTIONCOMMAND(name,row,action) UI_STRING(name ## _txt,row);UIMenuEntry name PROGMEM = {name ## _txt,3,action};
-#define UI_MENU_ACTIONSELECTOR(name,row,entries) UI_STRING(name ## _txt,row);UIMenuEntry name PROGMEM = {name ## _txt,2,(unsigned int)&entries};
-#define UI_MENU_SUBMENU(name,row,entries) UI_STRING(name ## _txt,row);UIMenuEntry name PROGMEM = {name ## _txt,2,(unsigned int)&entries};
+#define UI_MENU_HEADLINE(name,text) UI_STRING(name ## _txt,text);UIMenuEntry name PROGMEM = {name ## _txt,1,0,0,0};
+#define UI_MENU_CHANGEACTION(name,row,action) UI_STRING(name ## _txt,row);UIMenuEntry name PROGMEM = {name ## _txt,4,action,0,0};
+#define UI_MENU_ACTIONCOMMAND(name,row,action) UI_STRING(name ## _txt,row);UIMenuEntry name PROGMEM = {name ## _txt,3,action,0,0};
+#define UI_MENU_ACTIONSELECTOR(name,row,entries) UI_STRING(name ## _txt,row);UIMenuEntry name PROGMEM = {name ## _txt,2,(unsigned int)&entries,0,0};
+#define UI_MENU_SUBMENU(name,row,entries) UI_STRING(name ## _txt,row);UIMenuEntry name PROGMEM = {name ## _txt,2,(unsigned int)&entries,0,0};
+#define UI_MENU_CHANGEACTION_FILTER(name,row,action,filter,nofilter) UI_STRING(name ## _txt,row);UIMenuEntry name PROGMEM = {name ## _txt,4,action,filter,nofilter};
+#define UI_MENU_ACTIONCOMMAND_FILTER(name,row,action,filter,nofilter) UI_STRING(name ## _txt,row);UIMenuEntry name PROGMEM = {name ## _txt,3,action,filter,nofilter};
+#define UI_MENU_ACTIONSELECTOR_FILTER(name,row,entries,filter,nofilter) UI_STRING(name ## _txt,row);UIMenuEntry name PROGMEM = {name ## _txt,2,(unsigned int)&entries,filter,nofilter};
+#define UI_MENU_SUBMENU_FILTER(name,row,entries,filter,nofilter) UI_STRING(name ## _txt,row);UIMenuEntry name PROGMEM = {name ## _txt,2,(unsigned int)&entries,filter,nofilter};
 #define UI_MENU(name,items,itemsCnt) const UIMenuEntry * const name ## _entries[] PROGMEM = items;const UIMenu name PROGMEM = {2,0,itemsCnt,name ## _entries}
 #define UI_MENU_FILESELECT(name,items,itemsCnt) const UIMenuEntry * const name ## _entries[] PROGMEM = items;const UIMenu name PROGMEM = {1,0,itemsCnt,name ## _entries}
 
-#if FEATURE_CONTROLLER==2 // reprapdiscount smartcontroller has a sd card buildin
+#if FEATURE_CONTROLLER==2 || FEATURE_CONTROLLER==10 || FEATURE_CONTROLLER==11 // reprapdiscount smartcontroller has a sd card buildin
 #undef SDCARDDETECT
 #define SDCARDDETECT 49
 #undef SDCARDDETECTINVERTED
@@ -319,6 +325,9 @@ extern const int8_t encoder_table[16] PROGMEM ;
 #undef SDSUPPORT
 #define SDSUPPORT true
 #endif
+
+// Maximum size of a row - if row is larger, text gets scrolled
+#define MAX_COLS 28
 
 class UIDisplay {
   public:
@@ -328,15 +337,18 @@ class UIDisplay {
     uint8_t menuPos[5]; // Positions in menu
     void *menu[5]; // Menus active
     uint8_t menuTop[5]; // Top row in menu
+    int8_t shift; // Display shift for scrolling text
     int pageDelay; // Counter. If 0 page is refreshed if menuLevel is 0.
     void *errorMsg;
-    unsigned int activeAction; // action for ok/next/previous
-    unsigned int lastAction;
-    unsigned long lastSwitch; // Last time display switched pages
-    unsigned long lastRefresh;
-    unsigned int lastButtonAction;
-    unsigned long lastButtonStart;
-    unsigned long nextRepeat; // Time of next autorepeat
+    uint16_t activeAction; // action for ok/next/previous
+    uint16_t lastAction;
+    millis_t lastSwitch; // Last time display switched pages
+    millis_t lastRefresh;
+    uint16_t lastButtonAction;
+    millis_t lastButtonStart;
+    millis_t nextRepeat; // Time of next autorepeat
+    millis_t lastNextPrev; // for increasing speed settings
+    float lastNextAccumul; // Accumulated value
     unsigned int outputMask; // Output mask for backlight, leds etc.
     int repeatDuration; // Time beween to actions if autorepeat is enabled
     void addInt(int value,uint8_t digits,char fillChar=' '); // Print int into printCols
@@ -391,14 +403,34 @@ inline void ui_check_slow_encoder() {}
 void ui_check_slow_keys(int &action) {}
 #endif
 #endif
-#if FEATURE_CONTROLLER==2 || FEATURE_CONTROLLER==10 // reprapdiscount smartcontroller (2) gadgets3d (10)
+#if FEATURE_CONTROLLER==2 || FEATURE_CONTROLLER==10 || FEATURE_CONTROLLER==11 // reprapdiscount smartcontroller (2) gadgets3d (10)
 #define UI_HAS_KEYS 1
 #define UI_HAS_BACK_KEY 0
+#if FEATURE_CONTROLLER==11
+#define UI_DISPLAY_TYPE 5
+#define U8GLIB_ST7920
+#define UI_LCD_WIDTH 128
+#define UI_LCD_HEIGHT 64
+
+//select font size
+#define UI_FONT_6X10 //default font
+#ifdef UI_FONT_6X10
+#define UI_FONT_WIDTH 6
+#define UI_FONT_HEIGHT 10
+#define UI_FONT_DEFAULT u8g_font_6x10
+#endif
+
+//calculate rows and cols available with current font
+#define UI_COLS (UI_LCD_WIDTH/UI_FONT_WIDTH)
+#define UI_ROWS (UI_LCD_HEIGHT/UI_FONT_HEIGHT)
+#define UI_DISPLAY_CHARSET 3
+#else
 #define UI_DISPLAY_TYPE 1
 #define UI_DISPLAY_CHARSET 1
-#define BEEPER_TYPE 1
 #define UI_COLS 20
 #define UI_ROWS 4
+#endif
+#define BEEPER_TYPE 1
 #if FEATURE_CONTROLLER==10 // Gadgets3d shield
 #define BEEPER_PIN             33
 #define UI_DISPLAY_RS_PIN      16
