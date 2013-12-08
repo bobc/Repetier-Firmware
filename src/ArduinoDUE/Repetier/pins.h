@@ -194,6 +194,9 @@ STEPPER_CURRENT_CONTROL
 
 #define KNOWN_BOARD
 #define CPU_ARCH ARCH_ARM
+
+#define HEATER_PINS_INVERTED
+
 /*****************************************************************
 * Arduino Due Pin Assignments
 ******************************************************************/
